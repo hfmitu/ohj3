@@ -37,10 +37,15 @@ public class StudentRegister {
     }
 
     public void printStudentAttainments(String studentNumber, String order){
-        
+    
         ArrayList<Attainment> toprint = new ArrayList<Attainment>();
         for (Attainment a : attainments){
             if (a.getStudentNumber() == studentNumber) toprint.add(a);
+        }
+
+        if (toprint.size()==0){
+            System.out.println("Unknown student number: " + studentNumber);
+            return;
         }
         
         if (order.equals("by code")){

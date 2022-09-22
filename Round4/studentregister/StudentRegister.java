@@ -40,7 +40,7 @@ public class StudentRegister {
     
         ArrayList<Attainment> toprint = new ArrayList<Attainment>();
         for (Attainment a : attainments){
-            if (a.getStudentNumber() == studentNumber) toprint.add(a);
+            if (a.getStudentNumber().equals(studentNumber)) toprint.add(a);
         }
 
         if (toprint.size()==0){
@@ -53,7 +53,7 @@ public class StudentRegister {
             for (Attainment a : toprint) {
                 String coursename = "";
                 for(Course c : courses){
-                    if (a.getCourseCode() == c.getCode()) coursename=c.getName();
+                    if (a.getCourseCode().equals(c.getCode())) coursename=c.getName();
                 }
                 System.out.println("  " + a.getCourseCode() + " " + coursename + ": " + a.getGrade());
             }
@@ -65,7 +65,7 @@ public class StudentRegister {
             ArrayList<Course> coursenames = new ArrayList<Course>();
             for (Attainment a : toprint) {
                 for (Course c : courses){
-                    if (c.getCode() == a.getCourseCode()) coursenames.add(c);
+                    if (c.getCode().equals(a.getCourseCode())) coursenames.add(c);
                 }
             }
             Collections.sort(coursenames, (o1,o2)->(o1.getName().compareTo(o2.getName())));
@@ -80,7 +80,19 @@ public class StudentRegister {
     }
 
     public void printStudentAttainments(String studentNumber){
-        int i = 0;
+
+        boolean flag = false;
+
+        for (Attainment a : attainments){
+            if (a.getStudentNumber().equals(studentNumber)){
+                flag = true;
+            }
+        }
+
+        if (flag == false){
+            System.out.println("Unknown student number: " + studentNumber);
+        }
+
         String courseName = "";
         for (Attainment a : attainments){
             if (a.getStudentNumber().equals(studentNumber)){
@@ -88,9 +100,7 @@ public class StudentRegister {
                     if (a.getCourseCode().equals(c.getCode())) courseName=c.getName();
                 }
                 System.out.println("  " + a.getCourseCode() + " " + courseName + ": " + a.getGrade());
-                i++;
             };
         }
-        if (i==0) System.out.println("Unknown student number: " + studentNumber);
     }
 }

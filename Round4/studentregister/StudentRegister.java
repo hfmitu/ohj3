@@ -101,9 +101,9 @@ public class StudentRegister {
         }
 
         for (Student s : students){
-            if (studentNumber.equals(s.getStudentNumber())) System.out.println(s.getName() + "(" + studentNumber + ")");
+            if (studentNumber.equals(s.getStudentNumber())) System.out.println(s.getName() + " (" + studentNumber + "):");
         }
-        
+
         String courseName = "";
         for (Attainment a : attainments){
             if (a.getStudentNumber().equals(studentNumber)){

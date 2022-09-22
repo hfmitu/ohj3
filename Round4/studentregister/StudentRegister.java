@@ -50,7 +50,7 @@ public class StudentRegister {
         
         if (order.equals("by code")){
             for (Student s : students){
-                if (studentNumber.equals(s.getStudentNumber())) System.out.println(s.getName() + "(" + studentNumber + ")");
+                if (studentNumber.equals(s.getStudentNumber())) System.out.println(s.getName() + " (" + studentNumber + "):");
             }
             Collections.sort(toprint, (o1,o2)->(o1.getCourseCode().compareTo(o2.getCourseCode())));
             for (Attainment a : toprint) {
@@ -66,7 +66,7 @@ public class StudentRegister {
         
         if (order.equals("by name")){
             for (Student s : students){
-                if (studentNumber.equals(s.getStudentNumber())) System.out.println(s.getName() + "(" + studentNumber + ")");
+                if (studentNumber.equals(s.getStudentNumber())) System.out.println(s.getName() + " (" + studentNumber + "):");
             }
             ArrayList<Course> coursenames = new ArrayList<Course>();
             for (Attainment a : toprint) {
@@ -77,7 +77,7 @@ public class StudentRegister {
             Collections.sort(coursenames, (o1,o2)->(o1.getName().compareTo(o2.getName())));
             for (Course s : coursenames){
                 for (Attainment a : toprint){
-                    if (a.getCourseCode() == s.getCode()) System.out.println("  " + a.getCourseCode() + " " + s.getName() + ": " + a.getGrade());
+                    if (a.getCourseCode().equals(s.getCode())) System.out.println("  " + a.getCourseCode() + " " + s.getName() + ": " + a.getGrade());
                 }
             }
             return;

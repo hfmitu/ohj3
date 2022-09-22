@@ -80,6 +80,7 @@ public class StudentRegister {
     }
 
     public void printStudentAttainments(String studentNumber){
+        int i = 0;
         String courseName = "";
         for (Attainment a : attainments){
             if (a.getStudentNumber().equals(studentNumber)){
@@ -87,7 +88,9 @@ public class StudentRegister {
                     if (a.getCourseCode().equals(c.getCode())) courseName=c.getName();
                 }
                 System.out.println("  " + a.getCourseCode() + " " + courseName + ": " + a.getGrade());
+                i++;
             };
         }
+        if (i==0) System.out.println("Unknown student number: " + studentNumber);
     }
 }

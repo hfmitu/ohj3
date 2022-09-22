@@ -1,0 +1,8 @@
+Standings standings = new Standings();
+standings.addMatchResult("Tonga", 0, 3, "Cook Islands");
+standings.addMatchResult("Samoa", 3, 2, "American Samoa");
+standings.addMatchResult("Cook Islands", 1, 0, "Samoa");
+standings.addMatchResult("Tonga", 1, 2, "American Samoa");
+standings.addMatchResult("Tonga", 0, 3, "Samoa");
+standings.addMatchResult("American Samoa", 2, 0, "Cook Islands");
+standings.printStandings();

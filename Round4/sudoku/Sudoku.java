@@ -1,7 +1,7 @@
 public class Sudoku {
     
     private char[][] ruudukko;
-    private char[] merkit = {' ','1','2','3','4','5','6','7','8','9','0'};
+    private char[] merkit = {' ','1','2','3','4','5','6','7','8','9'};
 
 
     public Sudoku(){
@@ -14,41 +14,23 @@ public class Sudoku {
     }
 
     public void set(int i, int j, char c){
-        if (i < 0 || i > 8 || j < 0 || j > 8) {System.out.println("Trying to access illegal cell (" + i + ", " + j + ")!"); return;}
-        boolean flag = false;
-        for (char d : merkit){
-            if (c == d) flag = true;
+        if (i < 0 ||i > 8 || j < 0 || j > 8) {
+            System.out.println("Trying to access illegal cell (i, j)!");
+            return;
         }
-        if (flag==false) {System.out.println("Trying to set illegal character " + c + " to (" + i + ", " + j + ")!"); return;}
-        else ruudukko[i][j] = c;
+
+        boolean oikea = false;
+        for (char p : merkit){
+            if (c == p){
+                oikea = true;
+                break;
+            }
+        }
+        if (oikea) ruudukko[i][j] = c;
+        else System.out.println("Trying to set illegal character" + c + " to (" + i + ", "  + j + ")!");
     }
 
     public boolean check(){
-        //Tarkistetaan rivit
-        int[] check = {0,0,0,0,0,0,0,0,0,0};
-        for (int i = 0; i < ruudukko.length; i++){
-            for (char c : ruudukko[i]){
-                if (c != ' ') check[Character.getNumericValue(c)]++;
-            }
-            for (int s = 1; s < check.length; s++){
-                if (check[s] > 1) {System.out.println("Row " + i + " has multiple " + s + "'s!"); return false;}
-                check[s] = 0;
-            }
-            
-        }
-        //tarkistetaan sarakkeet
-        for (int s = 0; s < ruudukko[0].length;s++){
-        for (int i = 0; i < ruudukko.length;i++){
-            if (ruudukko[i][s] != ' ') check[Character.getNumericValue(ruudukko[i][s])]++;
-        }
-        for (int h = 1; h < check.length; h++){
-            if (check[s] > 1) {System.out.println("Column " + s + " has multiple " + h + "'s!"); return false;}
-            check[s] = 0;
-        }
-
-        }
-
-
 
         return true;
     }

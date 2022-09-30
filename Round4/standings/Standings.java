@@ -4,11 +4,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Standings {
     
-    List<Team> teams = new ArrayList<Team>();
+    private List<Team> teams = new ArrayList<Team>();
 
     static class Team {
         private String name;
@@ -59,12 +60,12 @@ public class Standings {
     }
 
     private void sort(){
-        Collections.sort(teams, (d1,d2) ->{
-            if ((d1.wins*3+d1.ties) != (d2.wins*3+d2.ties)) return (d1.wins*3+d1.ties) - (d2.wins*3+d2.ties);
-            else if ( d1.scored-d1.allowed != d2.scored-d2.allowed) return (d1.scored-d1.allowed) - (d2.scored - d2.allowed);
-            else if (d1.scored > d2.scored) return d1.scored-d2.scored;
-            else return d1.name.compareTo(d2.name);
-        });
+        Collections.sort(teams, (Team o1, Team o2)->{
+                if (o1.getPoints() == o2.getPoints() && (o1.getScored()-o1.getAllowed()) == (o2.getScored()-o2.getAllowed()) && o1.getScored() == o2.getScored()) return o2.getName().compareTo(o1.getName());
+                if (o1.getPoints() == o2.getPoints() && (o1.getScored()-o1.getAllowed()) == (o2.getScored()-o2.getAllowed())) return o2.getScored()-o1.getScored();
+                if (o1.getPoints() == o2.getPoints()) return (o2.getScored()-o2.getAllowed()) - (o1.getScored()-o1.getAllowed());
+                return o2.getPoints()-o1.getPoints();
+            });
     }
 
     public Standings(String filename){
@@ -78,41 +79,14 @@ public class Standings {
             while((Str = file.readLine()) != null) {
                 String[] line = Str.split("\\t");
                 String[] pnts = line[1].split("-");
-
-                boolean flag = false;
-
-                for (Team t : teams){
-                    if (t.name == line[0]) flag=true;
-                }
-                if (flag == false) teams.add(new Team(line[0]));
-                flag = false;
-
-                for (Team t: teams){
-                    if (t.name == line[2]) flag=true;
-                }
-                if(flag == false) teams.add(new Team(line[2]));
-
                 int a = Integer.parseInt(pnts[0]);
                 int b = Integer.parseInt(pnts[1]);
 
-                for (Team t : teams){
-                    if (t.name == line[0]){
-                        t.scored+= a;
-                        t.allowed+= b;
-                        if (a > b) t.wins++;
-                        if (a==b) t.ties++;
-                        if (a<b) t.losses++;
-                    }
-                    if (t.name== line[2]){
-                        t.scored+= b;
-                        t.allowed+= a;
-                        if (a < b) t.wins++;
-                        if (a==b) t.ties++;
-                        if (a>b) t.losses++;
-                    }
-                }
+                addMatchResult(line[0], a, b, line[2]);
+
             }
             sort();
+            file.close();
         } catch (IOException e) {
             
             e.printStackTrace();
@@ -124,31 +98,31 @@ public class Standings {
         boolean flag = false;
 
                 for (Team t : teams){
-                    if (t.name == teamNameA) flag=true;
+                    if (t.name.equals(teamNameA)) flag=true;
                 }
                 if (flag == false) teams.add(new Team(teamNameA));
                 flag = false;
 
                 for (Team t: teams){
-                    if (t.name == teamNameB) flag=true;
+                    if (t.name.equals(teamNameB)) flag=true;
                 }
                 if(flag == false) teams.add(new Team(teamNameB));
 
                 
 
                 for (Team t : teams){
-                    if (t.name == teamNameA){
+                    if (t.name.equals(teamNameA)){
                         t.scored+= goalsA;
                         t.allowed+= goalsB;
-                        if (goalsA > goalsB) t.wins++;
-                        if (goalsA==goalsB) t.ties++;
+                        if (goalsA > goalsB) {t.wins++;t.points+=3;}
+                        if (goalsA==goalsB) {t.ties++;t.points+=1;}
                         if (goalsA<goalsB) t.losses++;
                     }
-                    if (t.name== teamNameB){
+                    if (t.name.equals(teamNameB)){
                         t.scored+= goalsB;
                         t.allowed+= goalsA;
-                        if (goalsA < goalsB) t.wins++;
-                        if (goalsA==goalsB) t.ties++;
+                        if (goalsA < goalsB) {t.wins++;t.points+=3;}
+                        if (goalsA==goalsB) {t.ties++;t.points+=1;}
                         if (goalsA>goalsB) t.losses++;
                     }
                 }
@@ -156,6 +130,7 @@ public class Standings {
     }
 
     public void printStandings(){
+        sort();
         int length = 0;
         for (Team t : teams){
             if (t.name.length() > length) length = t.name.length();
@@ -179,8 +154,8 @@ public class Standings {
             if ((t.allowed < 10 && t.scored >=10)|| (t.allowed >= 10 && t.scored < 10)) System.out.print("  " + t.scored + "-" + t.allowed + " ");
             if (t.allowed >=10 && t.scored >=10) System.out.print(" " + t.scored + "-" + t.allowed + " ");
 
-            if (t.wins*3 + t.ties <10) System.out.println("  " + (t.wins*3 + t.ties));
-            if (t.wins*3 + t.ties >=10) System.out.println(" " + (t.wins*3+t.ties));
+            if (t.points <10) System.out.println("  " + t.points);
+            if (t.points >=10) System.out.println(" " + t.points);
         }
     }
     
